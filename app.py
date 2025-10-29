@@ -6,7 +6,7 @@ st.set_page_config(page_title="Student Performance Dashboard", layout="wide")
 
 # Title and Header
 st.title("📊 Department of Computer Applications - Student Performance Dashboard")
-st.markdown("#### Developed by *Irfan Sayyad*, Assistant Professor, Vignan's University")
+st.markdown("#### Developed by *Irfan Sayyad*, Vignan's University")
 
 # ==============================
 # Attendance Section
