@@ -42,7 +42,7 @@ st.markdown("""
 
 # Title Section
 st.markdown('<div class="main-header">📊 Department of Computer Applications - Student Dashboard</div>', unsafe_allow_html=True)
-st.markdown('<div class="main-header">👨‍🏫 Developed by *Irfan Sayyad*, Vignan’s University</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header">👨‍🏫 Developed by Irfan Sayyad, Vignan’s University</div>', unsafe_allow_html=True)
 
 
 # Seaborn style for colorful charts
