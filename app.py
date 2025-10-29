@@ -54,7 +54,7 @@ sns.set_palette("viridis")
 # ==============================
 st.markdown('<div class="section-header">📘 Attendance Analysis</div>', unsafe_allow_html=True)
 st.markdown('<div class="section-header">📂 Upload Attendance Excel File</div>', unsafe_allow_html=True)
-att_file = st.file_uploader("📂 Upload Attendance Excel File", type=["xlsx", "xls"], key="attendance")
+att_file = st.file_uploader("Upload Attendance Excel File", type=["xlsx", "xls"], key="attendance")
 
 if att_file is not None:
     df_att = pd.read_excel(att_file)
@@ -97,8 +97,8 @@ if att_file is not None:
 # 📗 Marks Analysis Section
 # ==============================
 st.markdown('<div class="section-header">📗 Marks Analysis</div>', unsafe_allow_html=True)
-
-marks_file = st.file_uploader("📂 Upload Marks Excel File", type=["xlsx", "xls"], key="marks")
+st.markdown('<div class="section-header">📗 Upload Marks Excel File</div>', unsafe_allow_html=True)
+marks_file = st.file_uploader("Upload Marks Excel File", type=["xlsx", "xls"], key="marks")
 
 if marks_file is not None:
     df_marks = pd.read_excel(marks_file)
