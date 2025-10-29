@@ -63,16 +63,16 @@ if attendance_file:
         return sum((row[sub] >= low) & (row[sub] < high) for sub in subjects)
 
     df_att['<60% Count'] = df_att.apply(lambda row: count_range(row, 0, 60), axis=1)
-    df_att['60-70% Count'] = df_att.apply(lambda row: count_range(row, 60, 70), axis=1)
-    df_att['70-75% Count'] = df_att.apply(lambda row: count_range(row, 70, 75), axis=1)
+    df_att['60-65% Count'] = df_att.apply(lambda row: count_range(row, 60,65), axis=1)
+    df_att['65-75% Count'] = df_att.apply(lambda row: count_range(row, 65, 75), axis=1)
     
     # Subjects per range
     def subjects_in_range(row, low, high):
         return ', '.join([sub for sub in subjects if low <= row[sub] < high])
 
     df_att['Subjects <60%'] = df_att.apply(lambda row: subjects_in_range(row, 0, 60), axis=1)
-    df_att['Subjects 60-70%'] = df_att.apply(lambda row: subjects_in_range(row, 60, 70), axis=1)
-    df_att['Subjects 70-75%'] = df_att.apply(lambda row: subjects_in_range(row, 70, 75), axis=1)
+    df_att['Subjects 60-65%'] = df_att.apply(lambda row: subjects_in_range(row, 60, 65), axis=1)
+    df_att['Subjects 65-75%'] = df_att.apply(lambda row: subjects_in_range(row, 65, 75), axis=1)
     
     # Filter students with any subject <75
     low_att_df = df_att[df_att['Count of Subjects <75%'] > 0]
