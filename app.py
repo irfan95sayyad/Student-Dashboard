@@ -81,30 +81,30 @@ if attendance_file:
     st.dataframe(
         low_att_df[['REGD.NO','NAME','Subjects <75%','Count of Subjects <75%',
                     '<60% Count','Subjects <60%',
-                    '60-70% Count','Subjects 60-70%',
-                    '70-75% Count','Subjects 70-75%']].style.set_properties(**{'background-color': '#e6f2ff', 'color': '#000'})
+                    '60-70% Count','Subjects 60-65%',
+                    '70-75% Count','Subjects 65-75%']].style.set_properties(**{'background-color': '#e6f2ff', 'color': '#000'})
     )
     
     # ----------------- Enhanced Attendance Ranges Chart -----------------
     attendance_ranges = {}
     for sub in subjects:
         low = df_att[df_att[sub] < 60].shape[0]
-        moderate = df_att[(df_att[sub] >= 60) & (df_att[sub] < 70)].shape[0]
-        near_threshold = df_att[(df_att[sub] >= 70) & (df_att[sub] < 75)].shape[0]
-        attendance_ranges[sub] = {'<60%': low, '60-70%': moderate, '70-75%': near_threshold}
+        moderate = df_att[(df_att[sub] >= 60) & (df_att[sub] < 65)].shape[0]
+        near_threshold = df_att[(df_att[sub] >= 65 & (df_att[sub] < 75)].shape[0]
+        attendance_ranges[sub] = {'<60%': low, '60-65%': moderate, '65-75%': near_threshold}
 
     labels = subjects
     low_counts = [attendance_ranges[sub]['<60%'] for sub in labels]
-    mid_counts = [attendance_ranges[sub]['60-70%'] for sub in labels]
-    high_counts = [attendance_ranges[sub]['70-75%'] for sub in labels]
+    mid_counts = [attendance_ranges[sub]['60-65%'] for sub in labels]
+    high_counts = [attendance_ranges[sub]['65-75%'] for sub in labels]
 
     fig, ax = plt.subplots(figsize=(12,6))
 
     # Stacked bars
     ax.bar(labels, low_counts, color='#ff4d4d', label='<60%')
-    ax.bar(labels, mid_counts, bottom=low_counts, color='#ffcc66', label='60-70%')
+    ax.bar(labels, mid_counts, bottom=low_counts, color='#ffcc66', label='60-65%')
     bottom_high = [low_counts[i] + mid_counts[i] for i in range(len(labels))]
-    ax.bar(labels, high_counts, bottom=bottom_high, color='#66b3ff', label='70-75%')
+    ax.bar(labels, high_counts, bottom=bottom_high, color='#66b3ff', label='65-75%')
 
     # Count labels inside each segment
     for i in range(len(labels)):
