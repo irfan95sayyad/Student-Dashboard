@@ -16,7 +16,7 @@ st.markdown("""
         background-color: #f5f7fa;
     }
     .main-header {
-        color: #ffffff;
+        color: #32145;
         background: linear-gradient(to right, #2E3192, #1BFFFF);
         padding: 12px;
         border-radius: 12px;
