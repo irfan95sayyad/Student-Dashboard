@@ -6,27 +6,43 @@ import seaborn as sns
 # Streamlit Page Setup
 st.set_page_config(page_title="Student Performance Dashboard", layout="wide")
 
+# Custom CSS Styling
+st.markdown("""
+    <style>
+    body {
+        background-color: #f5f7fa;
+        color: #111827;
+    }
+    .stApp {
+        background-color: #f5f7fa;
+    }
+    .main-header {
+        color: #ffffff;
+        background: linear-gradient(to right, #141E30, #243B55);
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+    }
+    .section-header {
+        color: #1e3a8a;
+        font-size: 22px;
+        font-weight: 700;
+        margin-top: 20px;
+        border-left: 6px solid #2563eb;
+        padding-left: 10px;
+    }
+    .css-18e3th9 {
+        padding: 2rem 1rem;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Title Section
-st.markdown(
-    """
-    <div class="main-header">
-        📊 Department of Computer Applications - Student Dashboard
-    </div>
-    <div style="
-        text-align:center;
-        color:#1e293b;
-        font-size:17px;
-        font-style:italic;
-        margin-top:8px;
-    ">
-        👨‍🏫 Developed by 
-        <span style="color:#0f766e; font-weight:700;">Irfan Sayyad</span>, 
-        Assistant Professor, Vignan’s University
-    </div>
-    """, unsafe_allow_html=True
-)
-
-
+st.markdown('<div class="main-header">📊 Department of Computer Applications - Student Dashboard</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header">👨‍🏫 Developed by *Irfan Sayyad*, Vignan’s University </div>')
 
 # Seaborn style for colorful charts
 sns.set_style("whitegrid")
