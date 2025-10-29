@@ -90,7 +90,7 @@ if attendance_file:
     for sub in subjects:
         low = df_att[df_att[sub] < 60].shape[0]
         moderate = df_att[(df_att[sub] >= 60) & (df_att[sub] < 65)].shape[0]
-        near_threshold = df_att[(df_att[sub] >= 65 & (df_att[sub] < 75)].shape[0]
+        near_threshold = df_att[(df_att[sub] >= 65) & (df_att[sub] < 75)].shape[0]
         attendance_ranges[sub] = {'<60%': low, '60-65%': moderate, '65-75%': near_threshold}
 
     labels = subjects
