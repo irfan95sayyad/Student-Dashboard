@@ -82,7 +82,7 @@ if attendance_file:
         low_att_df[['REGD.NO','NAME','Subjects <75%','Count of Subjects <75%',
                     '<60% Count','Subjects <60%',
                     '60-65% Count','Subjects 60-65%',
-                    '70-75% Count','Subjects 70-75%']].style.set_properties(**{'background-color': '#e6f2ff', 'color': '#000'})
+                    '65-75% Count','Subjects 65-75%']].style.set_properties(**{'background-color': '#e6f2ff', 'color': '#000'})
     )
     
     # ----------------- Enhanced Attendance Ranges Chart -----------------
