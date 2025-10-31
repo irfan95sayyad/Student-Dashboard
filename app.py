@@ -39,30 +39,32 @@ attendance_file = st.file_uploader("Upload Attendance Excel", type=["xlsx"], key
 
 if attendance_file:
     df_att = pd.read_excel(attendance_file)
-    subjects = df_att.columns[3:]
+    subjects = df_att.columns[3:]  # assuming first 3 columns are S.No, REGD.NO, NAME
     
-    # Preprocess attendance
+    # -------- Preprocess attendance --------
     def preprocess_att(x):
-        if x <= 1:      # handle decimals like 0.75
+        if pd.isna(x):
+            return 0
+        if x <= 1:  # handle decimals like 0.75
             x = x * 100
         return int(x)
     
     df_att[subjects] = df_att[subjects].applymap(preprocess_att)
     
-    # Find subjects below 65%
-    def subjects_below_65(row):
-        low_subs = [sub for sub in subjects if row[sub] < 65]
+    # -------- Subjects below 65% with their percentage --------
+    def subjects_below_65_with_percent(row):
+        low_subs = [f"{sub} ({row[sub]}%)" for sub in subjects if row[sub] < 65]
         return ', '.join(low_subs)
     
-    df_att['Subjects <65%'] = df_att.apply(subjects_below_65, axis=1)
-    df_att['Count <65%'] = df_att['Subjects <65%'].apply(lambda x: len(x.split(',')) if x else 0)
+    df_att['Subjects <65% (with %)'] = df_att.apply(subjects_below_65_with_percent, axis=1)
+    df_att['Count <65%'] = df_att['Subjects <65% (with %)'].apply(lambda x: len(x.split(',')) if x else 0)
     
-    # Filter students who have any subject <65%
+    # -------- Filter students who have any subject <65% --------
     below_65_df = df_att[df_att['Count <65%'] > 0]
 
     st.subheader("Students with Attendance Below 65%")
     st.dataframe(
-        below_65_df[['REGD.NO','NAME','Subjects <65%','Count <65%']].style.set_properties(
+        below_65_df[['REGD.NO', 'NAME', 'Subjects <65% (with %)', 'Count <65%']].style.set_properties(
             **{'background-color': '#e6f2ff', 'color': '#000'}
         )
     )
@@ -76,12 +78,14 @@ marks_file = st.file_uploader("Upload Marks Excel", type=["xlsx"], key="marks")
 
 if marks_file:
     df_marks = pd.read_excel(marks_file)
-    subjects = df_marks.columns[3:]
+    subjects = df_marks.columns[3:]  # assuming first 3 columns are S.No, REGD.NO, NAME
     
+    # -------- Compute totals and averages --------
     df_marks['Total Marks'] = df_marks[subjects].sum(axis=1)
     df_marks['Average %'] = df_marks['Total Marks'] / len(subjects)
     df_marks['Average %'] = df_marks['Average %'].round(2)
     
+    # -------- Categorize students --------
     def categorize(avg):
         if avg > 60:
             return 'Advance Learner'
@@ -93,13 +97,22 @@ if marks_file:
     df_marks['Category'] = df_marks['Average %'].apply(categorize)
     
     st.subheader("Student Categories based on Average Marks")
-    st.dataframe(df_marks[['REGD.NO','NAME','Total Marks','Average %','Category']].style.set_properties(**{'background-color': '#fff0f5', 'color': '#000'}))
+    st.dataframe(df_marks[['REGD.NO','NAME','Total Marks','Average %','Category']].style.set_properties(
+        **{'background-color': '#fff0f5', 'color': '#000'}
+    ))
     
-    # Pie chart
+    # -------- Pie chart --------
     category_counts = df_marks['Category'].value_counts()
     fig2, ax2 = plt.subplots(figsize=(6,6))
-    colors_marks = ['#66b3ff','#ff9999','#99ff99']
-    ax2.pie(category_counts, labels=category_counts.index, autopct=lambda p: f'{p:.1f}% ({int(p*sum(category_counts)/100)})', startangle=90, colors=colors_marks, wedgeprops={'edgecolor':'black'})
+    colors_marks = ['#66b3ff', '#ff9999', '#99ff99']
+    ax2.pie(
+        category_counts,
+        labels=category_counts.index,
+        autopct=lambda p: f'{p:.1f}% ({int(p*sum(category_counts)/100)})',
+        startangle=90,
+        colors=colors_marks,
+        wedgeprops={'edgecolor': 'black'}
+    )
     ax2.set_title("Student Category Distribution", fontsize=14, fontweight='bold')
     st.pyplot(fig2)
 
