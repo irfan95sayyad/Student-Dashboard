@@ -69,7 +69,7 @@ if attendance_file:
         )
     )
 
-    # -------- 📊 Bar Chart: Count of students <65% per subject --------
+    # -------- 📊 Compact Bar Chart: Count of students <65% per subject --------
     st.subheader("Subject-wise Count of Students Below 65% Attendance")
 
     subject_counts = {sub: (df_att[sub] < 65).sum() for sub in subjects}
@@ -77,28 +77,29 @@ if attendance_file:
 
     colors = plt.cm.Paired(range(len(subject_df)))
 
-    fig, ax = plt.subplots(figsize=(9, 5))
+    fig, ax = plt.subplots(figsize=(7.5, 4))
     bars = ax.bar(subject_df['Subject'], subject_df['Students Below 65%'], color=colors, edgecolor='black')
 
-    # Add count labels on top of each bar
+    # Add count labels on top of each bar (closer to bars)
     for bar in bars:
         height = bar.get_height()
         ax.text(
-            bar.get_x() + bar.get_width()/2,
-            height + 0.1,
+            bar.get_x() + bar.get_width() / 2,
+            height + 0.1,               # 🔹 Closer label
             f'{int(height)}',
             ha='center',
             va='bottom',
-            fontsize=10,
+            fontsize=9,
             fontweight='bold',
-            color='black'
+            color='#333333'
         )
 
-    ax.set_xlabel('Subjects', fontsize=12)
-    ax.set_ylabel('Number of Students (<65%)', fontsize=12)
-    ax.set_title('Attendance Below 65% per Subject', fontsize=14, fontweight='bold')
-    plt.xticks(rotation=45, ha='right')
-    ax.grid(axis='y', linestyle='--', alpha=0.6)
+    ax.set_xlabel('Subjects', fontsize=11)
+    ax.set_ylabel('No. of Students (<65%)', fontsize=11)
+    ax.set_title('Attendance Below 65% per Subject', fontsize=13, fontweight='bold')
+    plt.xticks(rotation=30, ha='right')
+    ax.grid(axis='y', linestyle='--', alpha=0.5)
+    plt.tight_layout()  # 🔹 Removes extra padding
 
     st.pyplot(fig)
 
@@ -136,7 +137,7 @@ if marks_file:
 
     # -------- Pie chart --------
     category_counts = df_marks['Category'].value_counts()
-    fig2, ax2 = plt.subplots(figsize=(6, 6))
+    fig2, ax2 = plt.subplots(figsize=(6, 5))
     colors_marks = ['#66b3ff', '#ff9999', '#99ff99']
     ax2.pie(
         category_counts,
