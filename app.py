@@ -69,6 +69,20 @@ if attendance_file:
         )
     )
 
+    # -------- 📊 Bar Chart: Count of students <65% per subject --------
+    st.subheader("Subject-wise Count of Students Below 65% Attendance")
+
+    subject_counts = {sub: (df_att[sub] < 65).sum() for sub in subjects}
+    subject_df = pd.DataFrame(list(subject_counts.items()), columns=['Subject', 'Students Below 65%'])
+    
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.bar(subject_df['Subject'], subject_df['Students Below 65%'], color='#007acc', edgecolor='black')
+    ax.set_xlabel('Subjects', fontsize=12)
+    ax.set_ylabel('Number of Students (<65%)', fontsize=12)
+    ax.set_title('Attendance Below 65% per Subject', fontsize=14, fontweight='bold')
+    plt.xticks(rotation=45, ha='right')
+    st.pyplot(fig)
+
 st.markdown('</div>', unsafe_allow_html=True)  # End Attendance section
 
 # ----------------- MARKS -----------------
