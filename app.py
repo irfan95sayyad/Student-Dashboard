@@ -40,7 +40,7 @@ attendance_file = st.file_uploader("Upload Attendance Excel", type=["xlsx"], key
 if attendance_file:
     df_att = pd.read_excel(attendance_file)
     subjects = df_att.columns[3:]  # assuming first 3 columns are S.No, REGD.NO, NAME
-    
+
     # -------- Preprocess attendance --------
     def preprocess_att(x):
         if pd.isna(x):
@@ -48,17 +48,17 @@ if attendance_file:
         if x <= 1:  # handle decimals like 0.75
             x = x * 100
         return int(x)
-    
+
     df_att[subjects] = df_att[subjects].applymap(preprocess_att)
-    
+
     # -------- Subjects below 65% with their percentage --------
     def subjects_below_65_with_percent(row):
         low_subs = [f"{sub} ({row[sub]}%)" for sub in subjects if row[sub] < 65]
         return ', '.join(low_subs)
-    
+
     df_att['Subjects <65% (with %)'] = df_att.apply(subjects_below_65_with_percent, axis=1)
     df_att['Count <65%'] = df_att['Subjects <65% (with %)'].apply(lambda x: len(x.split(',')) if x else 0)
-    
+
     # -------- Filter students who have any subject <65% --------
     below_65_df = df_att[df_att['Count <65%'] > 0]
 
@@ -74,13 +74,32 @@ if attendance_file:
 
     subject_counts = {sub: (df_att[sub] < 65).sum() for sub in subjects}
     subject_df = pd.DataFrame(list(subject_counts.items()), columns=['Subject', 'Students Below 65%'])
-    
-    fig, ax = plt.subplots(figsize=(8, 4))
-    ax.bar(subject_df['Subject'], subject_df['Students Below 65%'], color='#007acc', edgecolor='black')
+
+    colors = plt.cm.Paired(range(len(subject_df)))
+
+    fig, ax = plt.subplots(figsize=(9, 5))
+    bars = ax.bar(subject_df['Subject'], subject_df['Students Below 65%'], color=colors, edgecolor='black')
+
+    # Add count labels on top of each bar
+    for bar in bars:
+        height = bar.get_height()
+        ax.text(
+            bar.get_x() + bar.get_width()/2,
+            height + 0.5,
+            f'{int(height)}',
+            ha='center',
+            va='bottom',
+            fontsize=10,
+            fontweight='bold',
+            color='black'
+        )
+
     ax.set_xlabel('Subjects', fontsize=12)
     ax.set_ylabel('Number of Students (<65%)', fontsize=12)
     ax.set_title('Attendance Below 65% per Subject', fontsize=14, fontweight='bold')
     plt.xticks(rotation=45, ha='right')
+    ax.grid(axis='y', linestyle='--', alpha=0.6)
+
     st.pyplot(fig)
 
 st.markdown('</div>', unsafe_allow_html=True)  # End Attendance section
@@ -93,12 +112,12 @@ marks_file = st.file_uploader("Upload Marks Excel", type=["xlsx"], key="marks")
 if marks_file:
     df_marks = pd.read_excel(marks_file)
     subjects = df_marks.columns[3:]  # assuming first 3 columns are S.No, REGD.NO, NAME
-    
+
     # -------- Compute totals and averages --------
     df_marks['Total Marks'] = df_marks[subjects].sum(axis=1)
     df_marks['Average %'] = df_marks['Total Marks'] / len(subjects)
     df_marks['Average %'] = df_marks['Average %'].round(2)
-    
+
     # -------- Categorize students --------
     def categorize(avg):
         if avg > 60:
@@ -107,17 +126,17 @@ if marks_file:
             return 'Slow Learner'
         else:
             return 'Regular Learner'
-    
+
     df_marks['Category'] = df_marks['Average %'].apply(categorize)
-    
+
     st.subheader("Student Categories based on Average Marks")
-    st.dataframe(df_marks[['REGD.NO','NAME','Total Marks','Average %','Category']].style.set_properties(
+    st.dataframe(df_marks[['REGD.NO', 'NAME', 'Total Marks', 'Average %', 'Category']].style.set_properties(
         **{'background-color': '#fff0f5', 'color': '#000'}
     ))
-    
+
     # -------- Pie chart --------
     category_counts = df_marks['Category'].value_counts()
-    fig2, ax2 = plt.subplots(figsize=(6,6))
+    fig2, ax2 = plt.subplots(figsize=(6, 6))
     colors_marks = ['#66b3ff', '#ff9999', '#99ff99']
     ax2.pie(
         category_counts,
