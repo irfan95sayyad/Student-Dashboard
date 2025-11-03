@@ -85,7 +85,7 @@ if attendance_file:
         height = bar.get_height()
         ax.text(
             bar.get_x() + bar.get_width()/2,
-            height + 0.5,
+            height + 0.1,
             f'{int(height)}',
             ha='center',
             va='bottom',
